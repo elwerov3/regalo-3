@@ -289,13 +289,13 @@
 
         .contenedor-regalo {
             text-align: center;
-            padding: 60px 0;
+            padding: 40px 0;
             perspective: 1200px;
         }
 
         .regalo-3d {
-            width: 280px;
-            height: 280px;
+            width: clamp(220px, 60vw, 320px);
+            aspect-ratio: 1 / 1.1;
             margin: 0 auto;
             cursor: pointer;
             transition: transform 0.8s;
@@ -309,25 +309,32 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, #ff6b9d, #c06c84);
-            border-radius: 25px;
+            border-radius: 20px;
             position: relative;
-            box-shadow: 0 20px 70px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
             animation: saltar 2.8s infinite ease-in-out;
+            overflow: hidden;
         }
 
         @keyframes saltar {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-18px); }
         }
 
         .regalo-moño {
             position: absolute;
-            top: -50px;
+            top: -38px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 6em;
+            font-size: clamp(3.5em, 12vw, 5.5em);
             color: #000000;
             animation: girar-moño 5s infinite linear;
+            z-index: 2;
+        }
+
+        @keyframes girar-moño {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
         }
 
         .regalo-texto {
@@ -335,10 +342,12 @@
             inset: 0;
             display: grid;
             place-items: center;
-            font-size: 1.9em;
+            font-size: clamp(1.4em, 5vw, 1.9em);
             font-weight: bold;
             color: white;
             text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+            padding: 0 15px;
+            text-align: center;
         }
 
         .modal-regalo {
@@ -597,6 +606,15 @@
             .btn-entrar { font-size: 1.4em; padding: 16px 50px; }
             .contenedor-sobres, .galeria-polaroids, .contenedor-razones { grid-template-columns: 1fr; }
             .hidden-poem-content { max-width: 90%; left: 5%; }
+            .regalo-3d { width: 80vw; max-width: 280px; aspect-ratio: 1 / 1; }
+            .regalo-moño { top: -30px; font-size: 4.5em; }
+            .regalo-texto { font-size: 1.5em; padding: 0 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .regalo-3d { width: 75vw; }
+            .regalo-moño { top: -28px; font-size: 4em; }
+            .regalo-caja { border-radius: 16px; }
         }
     </style>
 </head>
@@ -762,7 +780,7 @@
             <h2 class="titulo-seccion">Tu Regalo Especial</h2>
             <p class="instruccion">Click en la caja para abrir un regalo lleno de promesas y amor... ¡Prepárate para la sorpresa! 🎁😍</p>
             <div class="contenedor-regalo">
-                <div class="regalo-3d" onclick="abrirRegalo()">
+                <div class="regalo-3d" onclick="window.location.href = 'https://elwerov3.github.io/regalo4/';">
                     <div class="regalo-caja">
                         <div class="regalo-moño">🎀</div>
                         <div class="regalo-texto">¡Ábreme con amor!</div>
@@ -938,13 +956,6 @@
             <p>Prometo seguir conociéndote con paciencia y cariño, porque eres alguien que vale la pena. ❤️</p>
             <p class="grande">¡Feliz cumpleaños atrasado! 🎂💝</p>
             <button class="btn-cerrar-modal" onclick="cerrarModalRegalo()">❤️ Gracias ❤️</button>
-            <span class="hidden-poem-container">
-                <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para piropo final oculto...</p>
-                <div class="hidden-poem-content">
-                    Eres el lugar donde quiero volver,<br>
-                    aunque nunca me haya ido del todo.
-                </div>
-            </span>
         </div>
     </div>
 
@@ -1017,20 +1028,6 @@
                 corazon.style.opacity = '0';
             }, 10);
             setTimeout(() => corazon.remove(), 1800);
-        }
-
-        function abrirRegalo() {
-            document.getElementById('modal-regalo').classList.add('activo');
-            for (let i = 0; i < 120; i++) {
-                setTimeout(() => crearConfeti(), i * 20);
-            }
-            for (let i = 0; i < 12; i++) {
-                setTimeout(() => crearFuegoArtificial(), i * 350);
-            }
-        }
-
-        function cerrarModalRegalo() {
-            document.getElementById('modal-regalo').classList.remove('activo');
         }
 
         function crearConfeti() {
@@ -1128,7 +1125,6 @@
             document.querySelectorAll('.btn-cerrar').forEach(btn => {
                 btn.addEventListener('click', (e) => cerrarSobre(e, btn));
             });
-            document.querySelector('.regalo-3d')?.addEventListener('click', abrirRegalo);
             document.querySelector('.btn-reiniciar-mensaje')?.addEventListener('click', reiniciarMensaje);
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.hidden-poem-container')) {
