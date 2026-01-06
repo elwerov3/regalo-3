@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños Atrasado, Mi Prioridad 💝</title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #000000 50%, #ffffff 100%);
+            color: #000000;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #pantalla-carga {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #ff6b9d 0%, #000000 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1.2s ease;
+            cursor: pointer;
+        }
+
+        #pantalla-carga.ocultar {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            font-size: 140px;
+            animation: latido 1.3s infinite ease-in-out, rotar 4s infinite linear;
+        }
+
+        @keyframes latido {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+        }
+
+        @keyframes rotar {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .corazon-loader {
+            color: #ffffff;
+        }
+
+        .texto-carga {
+            color: #ffffff;
+            font-size: 1.7em;
+            margin-top: 35px;
+            animation: parpadeo 1.8s infinite;
+        }
+
+        @keyframes parpadeo {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.35; }
+        }
+
+        .btn-entrar {
+            margin-top: 60px;
+            padding: 20px 70px;
+            background: #ffffff;
+            color: #c2185b;
+            border: 4px solid #c2185b;
+            border-radius: 999px;
+            font-size: 1.6em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+            transition: all 0.4s ease;
+        }
+
+        .btn-entrar:hover {
+            background: #c2185b;
+            color: white;
+            transform: translateY(-6px) scale(1.08);
+            box-shadow: 0 20px 60px rgba(194,24,91,0.5);
+        }
+
+        .corazon-flotante {
+            position: fixed;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 1;
+            animation: caer 10s linear infinite;
+        }
+
+        @keyframes caer {
+            0% { transform: translateY(-15vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(115vh) rotate(720deg); opacity: 0; }
+        }
+
+        #contenido-principal {
+            display: none;
+            padding: 25px;
+            max-width: 1280px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        #contenido-principal.mostrar {
+            display: block;
+        }
+
+        .header-principal {
+            text-align: center;
+            padding: 60px 25px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,107,157,0.75));
+            border-radius: 35px;
+            margin-bottom: 45px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+            animation: deslizar-abajo 1.6s ease-out;
+        }
+
+        @keyframes deslizar-abajo {
+            from { transform: translateY(-120px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .titulo-principal {
+            font-size: clamp(2.8em, 8vw, 4.2em);
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff6b9d, #c2185b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitulo {
+            font-size: 1.5em;
+            font-style: italic;
+            color: #333;
+        }
+
+        .seccion {
+            background: rgba(255,255,255,0.92);
+            border-radius: 30px;
+            padding: 45px 35px;
+            margin-bottom: 50px;
+            box-shadow: 0 12px 45px rgba(0,0,0,0.18);
+            transition: all 0.6s ease;
+        }
+
+        .seccion:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(255,107,157,0.3);
+        }
+
+        .titulo-seccion {
+            text-align: center;
+            font-size: 2.8em;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #ff6b9d, #c2185b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .titulo-seccion::after {
+            content: '💖';
+            font-size: 0.8em;
+            display: block;
+            margin-top: 12px;
+            animation: latido 2s infinite;
+        }
+
+        .instruccion {
+            text-align: center;
+            color: #444;
+            font-size: 1.3em;
+            margin-bottom: 35px;
+        }
+
+        .contenedor-sobres {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+        }
+
+        .sobre {
+            position: relative;
+            height: 260px;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .sobre-cerrado {
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b9d, #c06c84);
+            border-radius: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.3);
+            transition: all 0.7s ease;
+            transform-style: preserve-3d;
+            color: white;
+        }
+
+        .sobre.abierto .sobre-cerrado {
+            transform: rotateX(180deg);
+        }
+
+        .sobre-icono { font-size: 5em; animation: flotar 3s infinite ease-in-out; }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .sobre-texto {
+            margin-top: 18px;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .carta {
+            position: absolute;
+            inset: 0;
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 40px;
+            box-shadow: 0 15px 55px rgba(0,0,0,0.35);
+            transform: translateY(100%) rotateX(-90deg);
+            opacity: 0;
+            transition: all 0.9s ease;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .sobre.abierto .carta {
+            transform: translateY(0) rotateX(0deg);
+            opacity: 1;
+        }
+
+        .carta-titulo {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.1em;
+            background: linear-gradient(135deg, #ff6b9d, #c2185b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .carta-contenido {
+            line-height: 1.9;
+            font-size: 1.15em;
+            color: #222;
+        }
+
+        .carta-contenido p {
+            color: #111;
+        }
+
+        .carta-firma {
+            text-align: right;
+            margin-top: 35px;
+            font-style: italic;
+            font-size: 1.3em;
+            color: #c2185b;
+        }
+
+        .btn-cerrar {
+            display: block;
+            margin: 30px auto 0;
+            padding: 14px 45px;
+            background: #ff6b9d;
+            color: white;
+            border: none;
+            border-radius: 999px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.4s;
+        }
+
+        .btn-cerrar:hover {
+            background: #c2185b;
+            transform: scale(1.08);
+        }
+
+        .contenedor-regalo {
+            text-align: center;
+            padding: 60px 0;
+            perspective: 1200px;
+        }
+
+        .regalo-3d {
+            width: 280px;
+            height: 280px;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: transform 0.8s;
+        }
+
+        .regalo-3d:hover {
+            transform: rotateY(25deg) rotateX(15deg) scale(1.08);
+        }
+
+        .regalo-caja {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b9d, #c06c84);
+            border-radius: 25px;
+            position: relative;
+            box-shadow: 0 20px 70px rgba(0,0,0,0.4);
+            animation: saltar 2.8s infinite ease-in-out;
+        }
+
+        @keyframes saltar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .regalo-moño {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 6em;
+            color: #000000;
+            animation: girar-moño 5s infinite linear;
+        }
+
+        .regalo-texto {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font-size: 1.9em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+        }
+
+        .modal-regalo {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.88);
+            display: none;
+            place-items: center;
+            z-index: 9999;
+        }
+
+        .modal-regalo.activo {
+            display: grid;
+        }
+
+        .modal-contenido {
+            background: #ffffff;
+            padding: 50px 40px;
+            border-radius: 35px;
+            max-width: 90%;
+            width: 680px;
+            text-align: center;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+            animation: expandir 0.7s ease;
+        }
+
+        .modal-contenido h2 {
+            font-size: 2.8em;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ff6b9d, #c2185b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-contenido p {
+            font-size: 1.35em;
+            line-height: 1.8;
+            color: #222;
+            margin-bottom: 25px;
+        }
+
+        .grande {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 35px 0;
+            color: #c2185b;
+        }
+
+        .btn-cerrar-modal {
+            padding: 16px 55px;
+            background: #ff6b9d;
+            color: white;
+            border: none;
+            border-radius: 999px;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: all 0.4s;
+        }
+
+        .btn-cerrar-modal:hover {
+            background: #c2185b;
+            transform: scale(1.1);
+        }
+
+        .galeria-polaroids {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .polaroid {
+            background: #ffffff;
+            padding: 18px;
+            padding-bottom: 65px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            transform: rotate(var(--rot));
+            transition: all 0.5s ease;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.12);
+            z-index: 10;
+        }
+
+        .polaroid:nth-child(odd) { --rot: -7deg; }
+        .polaroid:nth-child(even) { --rot: 7deg; }
+
+        .polaroid-imagen {
+            height: 220px;
+            background: linear-gradient(135deg, #ffd1dc, #ff6b9d);
+            display: grid;
+            place-items: center;
+            font-size: 6em;
+            margin-bottom: 18px;
+        }
+
+        .polaroid-texto {
+            text-align: center;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            color: #333;
+        }
+
+        .contenedor-razones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .tarjeta-razon {
+            background: linear-gradient(135deg, #ffffff, #ffe4e9);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            transition: all 0.5s ease;
+        }
+
+        .tarjeta-razon:hover {
+            transform: translateY(-12px) scale(1.04);
+            box-shadow: 0 18px 60px rgba(255,107,157,0.35);
+        }
+
+        .razon-numero {
+            font-size: 3.8em;
+            font-weight: bold;
+            margin-bottom: 18px;
+            background: linear-gradient(135deg, #ff6b9d, #c2185b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .razon-texto {
+            font-size: 1.15em;
+            line-height: 1.7;
+            color: #222;
+        }
+
+        .seccion-final {
+            background: linear-gradient(135deg, #0d0015, #1a0033);
+            color: #ffffff;
+            text-align: center;
+            padding: 80px 40px;
+            border-radius: 35px;
+        }
+
+        .texto-maquina {
+            font-family: 'Courier New', monospace;
+            font-size: 1.7em;
+            line-height: 1.9;
+            min-height: 280px;
+            text-align: left;
+            max-width: 900px;
+            margin: 0 auto 40px;
+            white-space: pre-wrap;
+            color: #ffffff;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+            border-right: 4px solid #ff6b9d;
+            overflow: hidden;
+        }
+
+        .btn-reiniciar-mensaje {
+            padding: 18px 60px;
+            background: #ff6b9d;
+            color: white;
+            border: none;
+            border-radius: 999px;
+            font-size: 1.4em;
+            cursor: pointer;
+            transition: all 0.4s;
+        }
+
+        .btn-reiniciar-mensaje:hover {
+            background: #c2185b;
+            transform: scale(1.1);
+        }
+
+        .hidden-poem-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .hidden-poem {
+            cursor: pointer;
+            font-style: italic;
+            color: #c2185b;
+            margin-top: 20px;
+            transition: color 0.3s;
+            display: inline-block;
+        }
+
+        .hidden-poem:hover {
+            color: #ff80ab;
+        }
+
+        .hidden-poem-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            color: #ff4081;
+            font-style: italic;
+            line-height: 1.6;
+            text-align: center;
+            z-index: 10;
+            white-space: pre-wrap;
+            max-width: 300px;
+            animation: aparecer 0.6s ease;
+        }
+
+        .hidden-poem-content.visible {
+            display: block;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .confeti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: #ff6b9d;
+            animation: confeti-caer 4s linear infinite;
+        }
+
+        @keyframes confeti-caer {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .fuego-artificial {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: explotar 1.2s ease-out forwards;
+        }
+
+        @keyframes explotar {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(5); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .titulo-principal { font-size: 2.6em; }
+            .titulo-seccion { font-size: 2.2em; }
+            .seccion { padding: 35px 25px; }
+            .texto-maquina { font-size: 1.45em; }
+            .modal-contenido { padding: 40px 25px; }
+            .btn-entrar { font-size: 1.4em; padding: 16px 50px; }
+            .contenedor-sobres, .galeria-polaroids, .contenedor-razones { grid-template-columns: 1fr; }
+            .hidden-poem-content { max-width: 90%; left: 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-carga" onclick="entrarAlSitio()">
+        <div class="loader">
+            <div class="corazon-loader">💝</div>
+        </div>
+        <div class="texto-carga">Preparando tu regalo atrasado con mucho amor... 😍📱</div>
+        <button class="btn-entrar" onclick="entrarAlSitio(); event.stopPropagation();">✨ Entra al mundo de mi corazón ✨</button>
+    </div>
+
+    <div id="contenido-principal">
+
+        <header class="header-principal">
+            <h1 class="titulo-principal">🎂 Feliz Cumpleaños Atrasado, Mi Prioridad 🎂</h1>
+            <p class="subtitulo">Perdón por llegar tarde al 26 de diciembre, pero como dijiste, aceptas regalos atrasados... y este viene con todo mi corazón 💕😘</p>
+            <span class="hidden-poem-container">
+                <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para un mini poema oculto... 😊</p>
+                <div class="hidden-poem-content">
+                    Tu risa llega como brisa de verano,<br>
+                    calma mi alma y despierta mi mano.<br>
+                    Eres luz que no pide permiso para entrar,<br>
+                    mi refugio, mi siempre, mi lugar.
+                </div>
+            </span>
+        </header>
+
+        <section class="seccion">
+            <h2 class="titulo-seccion">Una disculpa llena de amor</h2>
+            <p>Sé que tu cumpleaños fue el 26 de diciembre y yo aparezco el 5 de enero... pero quería hacer algo especial que te muestre cuánto pienso en ti. Aunque nos estamos conociendo apenas, cada charla contigo me hace sentir que eres esa persona que estaba esperando. Eres mi prioridad ahora, y este regalo es para celebrar lo increíble que eres. 💖😍</p>
+        </section>
+
+        <section class="seccion">
+            <h2 class="titulo-seccion">Cartas desde mi corazón</h2>
+            <p class="instruccion">Toca cada sobre para abrir un pedacito de mis sentimientos... Prepárate para explosiones de amor! 📩❤️</p>
+
+            <div class="contenedor-sobres">
+                <div class="sobre" onclick="abrirSobre(this)">
+                    <div class="sobre-cerrado">
+                        <div class="sobre-icono">💌</div>
+                        <div class="sobre-texto">Carta #1: El Inicio</div>
+                    </div>
+                    <div class="carta">
+                        <h3 class="carta-titulo">Desde que te conocí...</h3>
+                        <div class="carta-contenido">
+                            <p>No puedo dejar de pensar en cómo entraste a mi vida. Fue como si el universo me dijera "aquí está alguien especial". Aunque han sido solo días desde que empezamos a hablar, cada mensaje tuyo me hace el día más brillante. Me encanta tu forma de ser, tan auténtica y llena de energía. Feliz cumpleaños atrasado, mi prioridad – quiero que sepas que ya ocupas un lugar enorme en mi corazón. 😘</p>
+                            <p>Imagina que esto es solo el comienzo de muchas aventuras juntos. No necesito meses para saber que eres importante; lo supe desde el primer "hola".</p>
+                            <span class="hidden-poem-container">
+                                <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema oculto... 📜</p>
+                                <div class="hidden-poem-content">
+                                    Eres el primer rayo que rompe la noche,<br>
+                                    un susurro suave que todo lo alborota.<br>
+                                    En tus palabras encuentro mi calma,<br>
+                                    ya no hay días grises, solo tu llama.
+                                </div>
+                            </span>
+                        </div>
+                        <div class="carta-firma">Con un abrazo que dura para siempre... 💝</div>
+                        <button class="btn-cerrar" onclick="cerrarSobre(event, this)">Cerrar y Guardar en el Corazón</button>
+                    </div>
+                </div>
+
+                <div class="sobre" onclick="abrirSobre(this)">
+                    <div class="sobre-cerrado">
+                        <div class="sobre-icono">💖</div>
+                        <div class="sobre-texto">Carta #2: Poema para Ti</div>
+                    </div>
+                    <div class="carta">
+                        <h3 class="carta-titulo">Un Poema Atrasado pero Eterno</h3>
+                        <div class="carta-contenido">
+                            <p>En poco tiempo, has cambiado mi mundo,<br> con tu sonrisa que ilumina como el sol.<br> Aunque nos conocemos apenas un suspiro,<br> eres mi prioridad, mi luz en el camino.</p>
+                            <p>No hacen falta años para sentir esto,<br> tu esencia me atrapa, me hace soñar despierto.<br> Feliz cumpleaños atrasado, mi hermosa estrella,<br> quiero seguir descubriéndote, sin prisa pero con alma.</p>
+                            <p>Eres importante, más de lo que imaginas,<br> en mi día a día, ya eres indispensable.<br> Que este regalo te muestre mi verdad,<br> y que nuestro camino sea lleno de magia y realidad. ✨</p>
+                            <span class="hidden-poem-container">
+                                <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini piropo oculto... 😘</p>
+                                <div class="hidden-poem-content">
+                                    Tu mirada guarda un cielo entero,<br>
+                                    y en cada pestañeo me pierdo sincero.
+                                </div>
+                            </span>
+                        </div>
+                        <div class="carta-firma">Escrito con tinta de mi corazón... 💕</div>
+                        <button class="btn-cerrar" onclick="cerrarSobre(event, this)">Cerrar</button>
+                    </div>
+                </div>
+
+                <div class="sobre" onclick="abrirSobre(this)">
+                    <div class="sobre-cerrado">
+                        <div class="sobre-icono">💗</div>
+                        <div class="sobre-texto">Carta #3: Lo que Admiro</div>
+                    </div>
+                    <div class="carta">
+                        <h3 class="carta-titulo">Lo que me enamora de ti...</h3>
+                        <div class="carta-contenido">
+                            <p>Admiro cómo eres tan real, sin máscaras. Tu humor me hace reír en los momentos más inesperados, y tu forma de ver la vida me inspira. Aunque sea poco tiempo, ya eres mi prioridad porque me hace querer ser mejor cada día. Feliz cumpleaños, preciosa – este regalo es para celebrar la maravilla que eres. 🌹</p>
+                            <p>Me encanta imaginar más conversaciones, más risas, más momentos que nos acerquen. Eres especial, y lo sabes.</p>
+                            <span class="hidden-poem-container">
+                                <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema oculto... 📖</p>
+                                <div class="hidden-poem-content">
+                                    Tienes el don de volver simple lo complejo,<br>
+                                    de hacerme sonreír cuando todo es espejo.<br>
+                                    Eres verdad en un mundo de filtros,<br>
+                                    mi refugio bonito entre tantos conflictos.
+                                </div>
+                            </span>
+                        </div>
+                        <div class="carta-firma">Con admiración infinita... 🌟</div>
+                        <button class="btn-cerrar" onclick="cerrarSobre(event, this)">Cerrar</button>
+                    </div>
+                </div>
+
+                <div class="sobre" onclick="abrirSobre(this)">
+                    <div class="sobre-cerrado">
+                        <div class="sobre-icono">💓</div>
+                        <div class="sobre-texto">Carta #4: Mis Deseos</div>
+                    </div>
+                    <div class="carta">
+                        <h3 class="carta-titulo">Deseos para tu Nuevo Año</h3>
+                        <div class="carta-contenido">
+                            <p>Deseo que este año esté lleno de alegrías, éxitos y amor. Que cada sueño tuyo se haga realidad, y que yo pueda estar ahí para celebrarlo. Aunque llegué tarde, mi sentimiento es genuino: eres mi prioridad, y quiero que lo sepas. Feliz cumpleaños atrasado – ojalá podamos crear recuerdos inolvidables juntos. 🎉</p>
+                            <p>No necesito más tiempo para valorarte; ya lo hago con todo mi ser.</p>
+                            <span class="hidden-poem-container">
+                                <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini piropo oculto... 💌</p>
+                                <div class="hidden-poem-content">
+                                    Que cada mañana te encuentre sonriendo,<br>
+                                    que el universo conspire a tu favor queriendo.
+                                </div>
+                            </span>
+                        </div>
+                        <div class="carta-firma">Con esperanza y cariño... ✨</div>
+                        <button class="btn-cerrar" onclick="cerrarSobre(event, this)">Cerrar</button>
+                    </div>
+                </div>
+
+                <div class="sobre" onclick="abrirSobre(this)">
+                    <div class="sobre-cerrado">
+                        <div class="sobre-icono">💘</div>
+                        <div class="sobre-texto">Carta #5: Mi Prioridad</div>
+                    </div>
+                    <div class="carta">
+                        <h3 class="carta-titulo">Tú eres mi prioridad</h3>
+                        <div class="carta-contenido">
+                            <p>Suena loco decirlo tan pronto, pero es verdad: te has convertido en mi prioridad. Pienso en cómo hacerte feliz, en cómo apoyarte, en cómo ser parte de tu vida. Aunque nos conocemos poco, ya me importas demasiado. Feliz cumpleaños – este regalo es para decirte que estoy aquí para ti, siempre. ❤️</p>
+                            <p>Quiero seguir conociéndote, paso a paso, porque siento que esto es especial.</p>
+                            <span class="hidden-poem-container">
+                                <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema oculto... 📝</p>
+                                <div class="hidden-poem-content">
+                                    Eres la canción que tarareo sin darme cuenta,<br>
+                                    el motivo secreto de mi mejor sonrisa lenta.
+                                </div>
+                            </span>
+                        </div>
+                        <div class="carta-firma">Siempre tuyo... 💝</div>
+                        <button class="btn-cerrar" onclick="cerrarSobre(event, this)">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion">
+            <h2 class="titulo-seccion">Tu Regalo Especial</h2>
+            <p class="instruccion">Click en la caja para abrir un regalo lleno de promesas y amor... ¡Prepárate para la sorpresa! 🎁😍</p>
+            <div class="contenedor-regalo">
+                <div class="regalo-3d" onclick="abrirRegalo()">
+                    <div class="regalo-caja">
+                        <div class="regalo-moño">🎀</div>
+                        <div class="regalo-texto">¡Ábreme con amor!</div>
+                    </div>
+                </div>
+            </div>
+            <span class="hidden-poem-container">
+                <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para un secreto oculto en el regalo... 🎀</p>
+                <div class="hidden-poem-content">
+                    No son flores ni joyas las que traigo hoy,<br>
+                    sino un rincón de mi alma solo para los dos.
+                </div>
+            </span>
+        </section>
+
+        <section class="seccion">
+            <h2 class="titulo-seccion">Nuestros Pequeños Momentos</h2>
+            <p class="instruccion">Aunque sean pocos, cada uno me hace sonreír... Hover para verlos de cerca! 📸😊</p>
+            <div class="galeria-polaroids">
+                <div class="polaroid">
+                    <div class="polaroid-imagen">📱</div>
+                    <div class="polaroid-texto">Esa primera charla que me dejó pensando en ti todo el día</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para piropo...</p>
+                        <div class="hidden-poem-content">
+                            Tu "hola" fue semilla,<br>
+                            ya es bosque en mi pecho.
+                        </div>
+                    </span>
+                </div>
+                <div class="polaroid">
+                    <div class="polaroid-imagen">😊</div>
+                    <div class="polaroid-texto">Cuando tu chiste me hizo reír solo en mi habitación</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para piropo...</p>
+                        <div class="hidden-poem-content">
+                            Tu risa viaja kilómetros<br>
+                            y aterriza justo donde debe.
+                        </div>
+                    </span>
+                </div>
+                <div class="polaroid">
+                    <div class="polaroid-imagen">💭</div>
+                    <div class="polaroid-texto">El momento en que me di cuenta de que eres mi prioridad</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para piropo...</p>
+                        <div class="hidden-poem-content">
+                            No lo decidí,<br>
+                            simplemente pasó y ya eras tú.
+                        </div>
+                    </span>
+                </div>
+                <div class="polaroid">
+                    <div class="polaroid-imagen">🌟</div>
+                    <div class="polaroid-texto">Imaginando nuestro futuro, lleno de cumpleaños juntos</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para piropo...</p>
+                        <div class="hidden-poem-content">
+                            Quiero que cada 26 de diciembre<br>
+                            tenga tu nombre escrito en velas.
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion">
+            <h2 class="titulo-seccion">Razones por las que Eres Mi Prioridad</h2>
+            <p class="instruccion">Y esto es solo el comienzo... Hover para sentir el brillo! ✨😘</p>
+            <div class="contenedor-razones">
+                <div class="tarjeta-razon">
+                    <div class="razon-numero">01</div>
+                    <div class="razon-texto"><strong>Tu autenticidad:</strong> Eres tan real que me inspiras a ser yo mismo. En poco tiempo, ya eres esencial.</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema...</p>
+                        <div class="hidden-poem-content">
+                            No finges ser nadie más,<br>
+                            y eso me enamora más.
+                        </div>
+                    </span>
+                </div>
+                <div class="tarjeta-razon">
+                    <div class="razon-numero">02</div>
+                    <div class="razon-texto"><strong>Tu sonrisa:</strong> Aunque la imagine por mensajes, ilumina mis días como nada más.</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema...</p>
+                        <div class="hidden-poem-content">
+                            Aunque no la vea,<br>
+                            la siento y todo brilla.
+                        </div>
+                    </span>
+                </div>
+                <div class="tarjeta-razon">
+                    <div class="razon-numero">03</div>
+                    <div class="razon-texto"><strong>Tus conversaciones:</strong> Cada charla es una aventura; me hacen priorizarte siempre.</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema...</p>
+                        <div class="hidden-poem-content">
+                            Hablar contigo es llegar a casa<br>
+                            después de un día largo.
+                        </div>
+                    </span>
+                </div>
+                <div class="tarjeta-razon">
+                    <div class="razon-numero">04</div>
+                    <div class="razon-texto"><strong>Cómo me haces sentir:</strong> Feliz, motivado, vivo. Eres mi prioridad porque me cambias para bien.</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema...</p>
+                        <div class="hidden-poem-content">
+                            Me das ganas de ser mejor,<br>
+                            y eso ya es mucho decir.
+                        </div>
+                    </span>
+                </div>
+                <div class="tarjeta-razon">
+                    <div class="razon-numero">05</div>
+                    <div class="razon-texto"><strong>Tu energía:</strong> Hay algo en tu forma de ser que me atrae, una energía positiva que me hace bien.</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema...</p>
+                        <div class="hidden-poem-content">
+                            Traes sol a mis mañanas grises<br>
+                            sin siquiera intentarlo.
+                        </div>
+                    </span>
+                </div>
+                <div class="tarjeta-razon">
+                    <div class="razon-numero">06</div>
+                    <div class="razon-texto"><strong>Tu perspectiva:</strong> La forma en que ves el mundo me hace ver las cosas desde ángulos que no había considerado.</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema...</p>
+                        <div class="hidden-poem-content">
+                            Me enseñas colores<br>
+                            que no sabía que existían.
+                        </div>
+                    </span>
+                </div>
+                <div class="tarjeta-razon">
+                    <div class="razon-numero">07</div>
+                    <div class="razon-texto"><strong>Tu paciencia:</strong> Valoro cómo te tomas el tiempo para conocernos mutuamente, sin prisas.</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema...</p>
+                        <div class="hidden-poem-content">
+                            Construyes puentes despacio,<br>
+                            pero nunca se caen.
+                        </div>
+                    </span>
+                </div>
+                <div class="tarjeta-razon">
+                    <div class="razon-numero">08</div>
+                    <div class="razon-texto"><strong>Eres mi prioridad:</strong> En poco tiempo te has convertido en alguien muy importante en mi vida.</div>
+                    <span class="hidden-poem-container">
+                        <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para mini poema...</p>
+                        <div class="hidden-poem-content">
+                            No sé cómo pasó tan rápido,<br>
+                            pero ya no imagino sin ti.
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion-final">
+            <div id="texto-maquina" class="texto-maquina"></div>
+            <button class="btn-reiniciar-mensaje" onclick="reiniciarMensaje()">💖 Leer de Nuevo con Amor 💖</button>
+        </section>
+
+    </div>
+
+    <div id="modal-regalo" class="modal-regalo">
+        <div class="modal-contenido">
+            <h2>🎁 Tu Regalo de Corazón 🎁</h2>
+            <p>No es algo material, es mi promesa: estaré aquí para escucharte, hacerte reír, apoyarte en tus metas, celebrar tus logros, y sobre todo, valorarte cada día. 😘</p>
+            <p>Prometo seguir conociéndote con paciencia y cariño, porque eres alguien que vale la pena. ❤️</p>
+            <p class="grande">¡Feliz cumpleaños atrasado! 🎂💝</p>
+            <button class="btn-cerrar-modal" onclick="cerrarModalRegalo()">❤️ Gracias ❤️</button>
+            <span class="hidden-poem-container">
+                <p class="hidden-poem" onclick="toggleHiddenPoem(this)">Click para piropo final oculto...</p>
+                <div class="hidden-poem-content">
+                    Eres el lugar donde quiero volver,<br>
+                    aunque nunca me haya ido del todo.
+                </div>
+            </span>
+        </div>
+    </div>
+
+    <script>
+        let intervaloCorazones;
+        let mensajeFinalEscrito = false;
+
+        function entrarAlSitio() {
+            document.getElementById('pantalla-carga').classList.add('ocultar');
+            setTimeout(() => {
+                document.getElementById('contenido-principal').classList.add('mostrar');
+                iniciarLluviaCorazones();
+                escribirMensajeFinal();
+            }, 1200);
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(entrarAlSitio, 4000);
+        });
+
+        function iniciarLluviaCorazones() {
+            const corazones = ['💕', '💖', '💗', '💓', '💝', '💘', '❤️', '💜', '🩷', '😍', '😘', '🥰', '🤗', '🙈', '💋'];
+            intervaloCorazones = setInterval(() => {
+                const corazon = document.createElement('div');
+                corazon.className = 'corazon-flotante';
+                corazon.textContent = corazones[Math.floor(Math.random() * corazones.length)];
+                corazon.style.left = Math.random() * 100 + 'vw';
+                corazon.style.fontSize = (Math.random() * 25 + 15) + 'px';
+                corazon.style.animationDuration = (Math.random() * 8 + 6) + 's';
+                corazon.style.animationDelay = Math.random() * 2 + 's';
+                corazon.style.opacity = Math.random() * 0.7 + 0.3;
+                document.body.appendChild(corazon);
+                setTimeout(() => corazon.remove(), 14000);
+            }, 180);
+        }
+
+        function abrirSobre(elemento) {
+            if (!elemento.classList.contains('abierto')) {
+                elemento.classList.add('abierto');
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => crearCorazonEspecial(elemento), i * 35);
+                }
+            }
+        }
+
+        function cerrarSobre(event, boton) {
+            event.stopPropagation();
+            const sobre = boton.closest('.sobre');
+            sobre.classList.remove('abierto');
+        }
+
+        function crearCorazonEspecial(elemento) {
+            const rect = elemento.getBoundingClientRect();
+            const corazon = document.createElement('div');
+            corazon.textContent = '💖';
+            corazon.style.position = 'fixed';
+            corazon.style.left = rect.left + rect.width / 2 + 'px';
+            corazon.style.top = rect.top + rect.height / 2 + 'px';
+            corazon.style.fontSize = '28px';
+            corazon.style.pointerEvents = 'none';
+            corazon.style.zIndex = '9999';
+            const angulo = Math.random() * 360;
+            const distancia = Math.random() * 220 + 120;
+            const x = Math.cos(angulo) * distancia;
+            const y = Math.sin(angulo) * distancia;
+            document.body.appendChild(corazon);
+            setTimeout(() => {
+                corazon.style.transition = 'all 1.6s ease-out';
+                corazon.style.transform = `translate(${x}px, ${y}px) scale(1.4) rotate(360deg)`;
+                corazon.style.opacity = '0';
+            }, 10);
+            setTimeout(() => corazon.remove(), 1800);
+        }
+
+        function abrirRegalo() {
+            document.getElementById('modal-regalo').classList.add('activo');
+            for (let i = 0; i < 120; i++) {
+                setTimeout(() => crearConfeti(), i * 20);
+            }
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => crearFuegoArtificial(), i * 350);
+            }
+        }
+
+        function cerrarModalRegalo() {
+            document.getElementById('modal-regalo').classList.remove('activo');
+        }
+
+        function crearConfeti() {
+            const confeti = document.createElement('div');
+            confeti.className = 'confeti';
+            confeti.style.left = Math.random() * 100 + 'vw';
+            confeti.style.background = ['#ff6b9d', '#c06c84', '#ffd1dc', '#ffffff', '#000000'][Math.floor(Math.random() * 5)];
+            confeti.style.animationDelay = Math.random() * 2.5 + 's';
+            document.body.appendChild(confeti);
+            setTimeout(() => confeti.remove(), 4500);
+        }
+
+        function crearFuegoArtificial() {
+            const colores = ['#ff6b9d', '#c06c84', '#ffd1dc', '#ff69b4'];
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.7;
+            for (let i = 0; i < 35; i++) {
+                const particula = document.createElement('div');
+                particula.className = 'fuego-artificial';
+                particula.style.left = x + 'px';
+                particula.style.top = y + 'px';
+                particula.style.background = colores[Math.floor(Math.random() * colores.length)];
+                const angulo = (i / 35) * Math.PI * 2;
+                const distancia = Math.random() * 280 + 140;
+                const offsetX = Math.cos(angulo) * distancia;
+                const offsetY = Math.sin(angulo) * distancia;
+                particula.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                document.body.appendChild(particula);
+                setTimeout(() => particula.remove(), 1400);
+            }
+        }
+
+        function escribirMensajeFinal() {
+            if (mensajeFinalEscrito) return;
+            mensajeFinalEscrito = true;
+            const texto = `Y así terminamos este regalo atrasado, pero lleno de amor real...\nEspero que cada carta, cada mensaje, cada detalle te haya hecho sentir lo especial que eres para mí.\nAunque nos conocemos desde hace tan poco, del 26 de diciembre al 5 de enero de 2026, ya eres mi prioridad absoluta. Tus mensajes me alegran el alma, y no puedo esperar a conocerte más.\nGracias por aceptar este regalo tardío – es mi forma de decirte que estoy aquí, pensando en ti, valorándote como nadie.\nFeliz cumpleaños una vez más! Que este año sea increíble, y ojalá lo compartamos juntos, creando recuerdos que duren para siempre.\nCon todo mi cariño, y un beso en la distancia... 💖😘🥰`;
+            const el = document.getElementById('texto-maquina');
+            let i = 0;
+            function type() {
+                if (i < texto.length) {
+                    el.textContent += texto[i];
+                    i++;
+                    let velocidad = 55 + Math.random() * 40;
+                    if (texto[i-1] === ',' || texto[i-1] === '…') velocidad = 250;
+                    if (texto[i-1] === '.' || texto[i-1] === '!') velocidad = 400;
+                    if (texto[i-1] === '\n') velocidad = 600;
+                    setTimeout(type, velocidad);
+                } else {
+                    for (let j = 0; j < 50; j++) {
+                        setTimeout(() => crearCorazonExplosivo(), j * 50);
+                    }
+                }
+            }
+            type();
+        }
+
+        function reiniciarMensaje() {
+            const el = document.getElementById('texto-maquina');
+            el.textContent = '';
+            mensajeFinalEscrito = false;
+            escribirMensajeFinal();
+        }
+
+        function crearCorazonExplosivo() {
+            const corazon = document.createElement('div');
+            corazon.textContent = ['💕', '💖', '💗', '💓', '💝'][Math.floor(Math.random() * 5)];
+            corazon.style.position = 'fixed';
+            corazon.style.left = '50%';
+            corazon.style.top = '50%';
+            corazon.style.fontSize = '40px';
+            corazon.style.pointerEvents = 'none';
+            corazon.style.zIndex = '9999';
+            const angulo = Math.random() * 360;
+            const distancia = Math.random() * 450 + 250;
+            const x = Math.cos(angulo * Math.PI / 180) * distancia;
+            const y = Math.sin(angulo * Math.PI / 180) * distancia;
+            document.body.appendChild(corazon);
+            setTimeout(() => {
+                corazon.style.transition = 'all 2.2s ease-out';
+                corazon.style.transform = `translate(${x}px, ${y}px) rotate(720deg) scale(2)`;
+                corazon.style.opacity = '0';
+            }, 20);
+            setTimeout(() => corazon.remove(), 2500);
+        }
+
+        function toggleHiddenPoem(element) {
+            const content = element.nextElementSibling;
+            content.classList.toggle('visible');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.sobre').forEach(sobre => {
+                sobre.addEventListener('click', () => abrirSobre(sobre));
+            });
+            document.querySelectorAll('.btn-cerrar').forEach(btn => {
+                btn.addEventListener('click', (e) => cerrarSobre(e, btn));
+            });
+            document.querySelector('.regalo-3d')?.addEventListener('click', abrirRegalo);
+            document.querySelector('.btn-reiniciar-mensaje')?.addEventListener('click', reiniciarMensaje);
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.hidden-poem-container')) {
+                    document.querySelectorAll('.hidden-poem-content.visible').forEach(content => {
+                        content.classList.remove('visible');
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
